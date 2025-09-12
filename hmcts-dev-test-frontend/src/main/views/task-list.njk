@@ -1,0 +1,87 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% extends "template.njk" %}
+
+{%block pageTitle%}
+  Task list
+{%endblock%}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <div class="govuk-grid-column-one-half">
+        <h1 class="govuk-heading-xl">Task list</h1>
+      </div>
+      <div class="govuk-grid-column-one-half govuk-!-text-align-right">
+        {{ govukButton({
+          text: "Create new task",
+          href: "/createtask"
+        }) }}
+      </div>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h3> {{rows | length}} results</h3>
+      {% if rows | length > 0 %}
+        {%for row in rows%}
+          {{ govukSummaryList({
+            card: {
+              title: {
+                text: row.title
+              },
+              actions: {
+                items: [
+                  {
+                    href: "/updatetask/"+row._id,
+                    text: "Update",
+                    visuallyHiddenText: row.title
+                  },
+                  {
+                    href: "/deletetask/"+row._id,
+                    text: "Delete",
+                    visuallyHiddenText: row.title
+                  }
+                ]
+              }
+            },
+            rows: [
+              {
+                key: {
+                  text: "Status"
+                },
+                value: {
+                  text: row.status
+                }
+              },
+              {
+                key: {
+                  text: "Description"
+                },
+                value: {
+                  text: row.description
+                }
+              },
+              {
+                key: {
+                  text: "Due"
+                },
+                value: {
+                  text: row.due_date | convertDate(row.due_date)
+                }
+              }
+            ]
+          }) }}
+        {%endfor%}
+      {%else%}
+        {{ govukWarningText({
+          text: "No task available in database",
+          iconFallbackText: "Warning"
+        }) }}
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

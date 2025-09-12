@@ -1,0 +1,122 @@
+{% extends "template.njk" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{%block pageTitle%}
+  Update task
+{%endblock%}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Update task</h1>
+        <form method="post" action="/updatetask/{{taskId}}">
+          {{ govukInput({
+            label: {
+              text: "Task title",
+              classes: "govuk-label--m",
+              isPageHeading: false
+            },
+            hint: {
+              text: "Enter title of the task you are going to create"
+            },
+            classes: "govuk-input--width-30",
+            id: "taskTitle",
+            name: "taskTitle",
+            value: taskTitle,
+            errorMessage: {
+              text: formErrorsGovukArray[0].inline
+            } if formErrorsGovukArray[0].field === 'taskTitle'
+          }) }}
+          {{ govukRadios({
+            name: "taskStatus",
+            id: "taskStatus",
+            value: taskStatus,
+            fieldset: {
+              legend: {
+                text: "Task status",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--m"
+              }
+            },
+            items: [
+              {
+                value: "Not Started",
+                text: "Not Started"
+              },
+              {
+                value: "In Progress",
+                text: "In Progress"
+              },
+              {
+                value: "Completed",
+                text: "Completed"
+              }
+            ],
+            errorMessage: {
+              text: formErrorsGovukArray[0].inline
+            } if formErrorsGovukArray[0].field === 'taskStatus'
+          }) }}
+          {{ govukDateInput({
+            id: "taskDueDate",
+            namePrefix: "taskDueDate",
+            fieldset: {
+              legend: {
+                text: "Task due date",
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--m"
+              }
+            },
+            hint: {
+              text: "Enter due date to complete the task. For example, 27 9 2025"
+            },
+            items: [
+            {
+              classes: "govuk-input--width-2",
+              name: "Day",
+              value: taskDay
+            },
+            {
+              classes: "govuk-input--width-2",
+              name: "Month",
+              value: taskMonth
+            },
+            {
+              classes: "govuk-input--width-4",
+              name: "Year",
+              value: taskYear
+            }
+          ],
+          errorMessage: {
+            text: formErrorsGovukArray[0].inline
+          } if formErrorsGovukArray[0].field === 'taskDueDate'
+          }) }}
+          {{ govukTextarea({
+            name: "taskDescription",
+            id: "taskDescription",
+            value: taskDescription,
+            label: {
+              text: "Task description",
+              classes: "govuk-label--m",
+              isPageHeading: false
+            },
+            hint: {
+              text: "Enter more details about task you are going to create"
+            },
+            errorMessage: {
+              text: formErrorsGovukArray[0].inline
+            } if formErrorsGovukArray[0].field === 'taskDescription'
+          }) }}
+          <div class="govuk-button-group">
+            {{ govukButton({
+              text: "Confirm"
+            }) }}
+            <a class="govuk-link" href="/">Cancel</a>
+          </div>
+        </form>
+    </div>
+  </div>
+{% endblock %}
