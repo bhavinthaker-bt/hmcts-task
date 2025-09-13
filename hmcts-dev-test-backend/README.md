@@ -75,4 +75,5 @@ Implement Security HTTP headers
 Implement Huskey/Pre-commit hook on git check In/Out
 Implement CI/CD
 Implement Dockerfile for kubernetes
+Implement document versioning logic
 ```
